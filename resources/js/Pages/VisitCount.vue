@@ -3,12 +3,9 @@ import { ref } from "vue";
 const messages = ref([]);
 const message = ref("");
 
-Echo.channel("messages").listen("MessageReceived", (e) => {
+Echo.private("messages").listen("MessageReceived", (e) => {
     if (!messages.value.find((m) => m.id === e.id)) {
-        messages.value.push({
-            ...e,
-            who: "Them",
-        });
+        messages.value.push(e);
     }
 });
 
