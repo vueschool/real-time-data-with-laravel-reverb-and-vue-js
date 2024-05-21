@@ -1,10 +1,37 @@
 <script setup>
 import { ref } from "vue";
-const count = ref(0);
-Echo.channel("hello-world").listen("HelloWorld", (e) => {
-    count.value++;
+const messages = ref([]);
+const message = ref("");
+
+Echo.channel("messages").listen("MessageReceived", (e) => {
+    if (!messages.value.find((m) => m.id === e.id)) {
+        messages.value.push({
+            ...e,
+            who: "Them",
+        });
+    }
 });
+
+function handleSubmit() {
+    const msg = {
+        id: crypto.randomUUID(),
+        message: message.value,
+    };
+    messages.value.push({
+        ...msg,
+        who: "Me",
+    });
+    axios.post("/messages", msg);
+}
 </script>
 <template>
-    <div>The visit count is {{ count }}</div>
+    <ul>
+        <li v-for="message in messages" :key="message.id">
+            {{ message.message }} - {{ message.who }}
+        </li>
+    </ul>
+    <form @submit.prevent="handleSubmit">
+        <textarea v-model="message"></textarea>
+        <button>Send Message</button>
+    </form>
 </template>
