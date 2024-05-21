@@ -16,6 +16,10 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get("/visit-count", function(){
+    return Inertia::render("VisitCount");
+});
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
