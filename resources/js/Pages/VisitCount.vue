@@ -3,7 +3,11 @@ import { ref } from "vue";
 const messages = ref([]);
 const message = ref("");
 
-Echo.private("messages").listen("MessageReceived", (e) => {
+const props = defineProps({
+    user: Object,
+});
+
+Echo.private(`messages.${props.user.id}`).listen("MessageReceived", (e) => {
     if (!messages.value.find((m) => m.id === e.id)) {
         messages.value.push(e);
     }

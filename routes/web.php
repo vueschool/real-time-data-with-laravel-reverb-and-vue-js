@@ -27,7 +27,9 @@ Route::post("/messages", function(){
 });
 
 Route::get("/visit-count", function(){
-    return Inertia::render("VisitCount");
+    return Inertia::render("VisitCount", [
+        "user" => auth()->user()
+    ]);
 });
 
 Route::get('/dashboard', function () {
